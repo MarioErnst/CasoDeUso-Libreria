@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recomendador de Libros</title>
+  <meta name="theme-color" content="#0b1220" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Recomendador de Libros</div>
+    <div class="badge">Demo QR</div>
+  </header>
+
+  <main class="container">
+    <section class="intro">
+      <h1>Encuentra tu próximo libro</h1>
+      <p>Responde un par de pasos y te mostraremos 1–3 títulos que calzan con tu ánimo, ritmo y presupuesto.</p>
+    </section>
+
+    <section id="wizard" class="wizard">
+      <div class="progress">
+        <div class="progress__bar" id="progressBar"></div>
+      </div>
+      <div class="progress__label"><span id="progressText">Paso 1</span><span id="progressPct">0%</span></div>
+
+      <div id="steps"></div>
+
+      <footer class="controls">
+        <button id="btnBack" class="btn secondary" disabled>Atrás</button>
+        <button id="btnNext" class="btn primary" disabled>Siguiente</button>
+      </footer>
+    </section>
+
+    <section id="results" class="results hidden">
+      <div class="results__head">
+        <h2>Tus recomendaciones</h2>
+        <div id="loading" class="loading hidden"><span class="spinner"></span>Cargando…</div>
+      </div>
+      <div id="cards" class="cards"></div>
+      <div id="empty" class="empty hidden">No encontramos un match perfecto. Ajusta el presupuesto o relaja filtros.</div>
+      <div class="results__actions">
+        <button id="btnAgain" class="btn secondary">Nueva búsqueda</button>
+        <button id="btnReset" class="btn outline">Reiniciar</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
