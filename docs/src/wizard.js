@@ -1,6 +1,6 @@
 import { STATE } from './state.js';
 
-export function renderStep(container, step){
+export function renderStep(container, step) {
   container.innerHTML = '';
   const section = document.createElement('section');
   section.className = 'step active';
@@ -10,7 +10,7 @@ export function renderStep(container, step){
   h.textContent = step.title;
   section.appendChild(h);
 
-  if(step.type === 'range'){
+  if (step.type === 'range') {
     const wrap = document.createElement('div');
     wrap.className = 'range';
     wrap.innerHTML = `
@@ -19,11 +19,18 @@ export function renderStep(container, step){
     `;
     container.appendChild(section);
     container.appendChild(wrap);
+
     const lab = wrap.querySelector('#label-precio');
     const rng = wrap.querySelector('#range-precio');
-    const fmt = n => Number(n).toLocaleString('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0});
+    const fmt = n => Number(n).toLocaleString('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
+
     lab.textContent = `Presupuesto: ${fmt(rng.value)}`;
-    rng.addEventListener('input', e => { STATE.data.precio_max = Number(e.target.value); lab.textContent = `Presupuesto: ${fmt(e.target.value)}`; });
+    rng.addEventListener('input', e => {
+      STATE.data.precio_max = Number(e.target.value);
+      lab.textContent = `Presupuesto: ${fmt(e.target.value)}`;
+      console.log("✏️ Cambio en slider precio:", STATE.data.precio_max);
+      container.dispatchEvent(new CustomEvent('step:changed'));
+    });
     return;
   }
 
@@ -39,19 +46,23 @@ export function renderStep(container, step){
     div.dataset.value = value;
 
     div.addEventListener('click', () => {
-      if(step.multi){
+      if (step.multi) {
         const arr = STEP_VALUE_ARRAY(step.id);
         const idx = arr.indexOf(value);
-        if(idx >= 0){ arr.splice(idx,1); div.classList.remove('selected'); }
-        else {
-          if(step.max && arr.length >= step.max) return;
-          arr.push(value); div.classList.add('selected');
+        if (idx >= 0) {
+          arr.splice(idx, 1);
+          div.classList.remove('selected');
+        } else {
+          if (step.max && arr.length >= step.max) return;
+          arr.push(value);
+          div.classList.add('selected');
         }
       } else {
         SELECT_VALUE(step.id, value);
         [...grid.children].forEach(c => c.classList.remove('selected'));
         div.classList.add('selected');
       }
+      console.log("✏️ Paso cambiado:", step.id, "STATE:", { ...STATE.data });
       container.dispatchEvent(new CustomEvent('step:changed'));
     });
 
@@ -62,15 +73,22 @@ export function renderStep(container, step){
   container.appendChild(section);
 }
 
-function STEP_VALUE_ARRAY(stepId){
-  if(stepId === 'evitar'){ if(!Array.isArray(STATE.data.evitar)) STATE.data.evitar = []; return STATE.data.evitar; }
-  if(stepId === 'temas'){ if(!Array.isArray(STATE.data.temas)) STATE.data.temas = []; return STATE.data.temas; }
+function STEP_VALUE_ARRAY(stepId) {
+  if (stepId === 'evitar') {
+    if (!Array.isArray(STATE.data.evitar)) STATE.data.evitar = [];
+    return STATE.data.evitar;
+  }
+  if (stepId === 'temas') {
+    if (!Array.isArray(STATE.data.temas)) STATE.data.temas = [];
+    return STATE.data.temas;
+  }
   return [];
 }
 
-function SELECT_VALUE(stepId, value){
+function SELECT_VALUE(stepId, value) {
   const d = STATE.data;
-  switch(stepId){
+  switch (stepId) {
+    case 'destino': d.destino = value; break;
     case 'modo': STATE.branch = value; break;
     case 'tipo': d.tipo = value; break;
     case 'ficGenero': d.ficGenero = value; break;
@@ -84,5 +102,7 @@ function SELECT_VALUE(stepId, value){
     case 'extension': d.extension = value; break;
     case 'formato': d.formato = value; break;
     case 'publico': d.publico = value; break;
+    default:
+      console.warn("⚠️ Paso no manejado en SELECT_VALUE:", stepId, "con valor", value);
   }
 }

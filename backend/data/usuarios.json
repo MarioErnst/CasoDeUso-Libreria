@@ -1,0 +1,20 @@
+[
+  {
+    "id": "ebd8c4d6-285d-4f0c-81f6-6e8c0e70d6a6",
+    "nombre": "Mario Ernst",
+    "telefono": "56948952434",
+    "token": "67078c4e-98b4-46d6-8aa4-77ee0492a4e0"
+  },
+  {
+    "id": "1bf6d6af-9249-413e-b392-e6f938a403cc",
+    "nombre": "Carolina",
+    "telefono": "56953337679",
+    "token": "dff451c0-1493-435d-ba60-3fc219b3f1d3"
+  },
+  {
+    "id": "2589a79b-15f4-4215-83be-84bbe54bfe7f",
+    "nombre": "Mario Ernst Barra",
+    "telefono": "988080571",
+    "token": "ef274955-30f5-47dc-b849-ebd55e7f9cc8"
+  }
+]

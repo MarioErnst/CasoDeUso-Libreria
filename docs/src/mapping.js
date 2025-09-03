@@ -1,9 +1,9 @@
 export function toPayload(branch, data){
   const out = {
+    destino: data.destino || 'propio', // NUEVO
     animo: data.animo || inferAnimo(branch, data),
     tipo: data.tipo || 'Me da igual',
     genero_tema: inferGeneroTema(branch, data),
-    ritmo: data.ritmo || data.ficRitmo || 'Medio',
     extension: data.extension || data.ficLongitud || data.nfLongitud || 'Medio',
     formato: data.formato || 'Cualquiera',
     precio_max: Number(data.precio_max || 15000),
@@ -12,6 +12,7 @@ export function toPayload(branch, data){
   };
   return out;
 }
+
 
 function inferAnimo(branch, d){
   if(branch === 'idea'){

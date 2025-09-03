@@ -374,23 +374,6 @@
     "content_flags": []
   },
   {
-    "titulo": "Breve historia de Chile",
-    "autor": "S. Riquelme",
-    "tipo": "No ficción",
-    "genero": "Historia",
-    "subgenero": null,
-    "paginas": 310,
-    "ritmo": "Medio",
-    "tono": "Reflexivo",
-    "publico": "Adulto",
-    "formato": ["Tapa blanda"],
-    "precio_clp": 13990,
-    "idioma": "es",
-    "premios": [],
-    "bestseller": true,
-    "content_flags": []
-  },
-  {
     "titulo": "Pequeños inventores",
     "autor": "C. Molina",
     "tipo": "No ficción",

@@ -1,24 +1,21 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Depends, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from services import motor, auth
 from pydantic import BaseModel, Field, conint
 from dotenv import load_dotenv
 load_dotenv()
 from services.motor import MotorRecomendador, map_extension_range
-from services.redactor import redactar_motivos
 from typing import List, Literal, Optional, Dict, Any
 import json
 import os
-from services.motor import MotorRecomendador, map_extension_range
+import datetime
 
-
-
-# IA redactor (solo para el texto de justificación)
+# ======= IA redactor (solo para motivos) =======
 try:
     from services.redactor import redactar_motivos
 except Exception:
-    # Fallback suave si no está instalado el SDK todavía
+    # Fallback simple si no está instalado el SDK
     def redactar_motivos(preferencias, explicaciones, libros):
-        # Devuelve motivos simples para no romper la UX
         outs = []
         for i, l in enumerate(libros):
             parts = []
@@ -30,7 +27,7 @@ except Exception:
                 lo, hi = map_extension_range(preferencias["extension"]) or (None, None)
                 if lo or hi:
                     parts.append("extensión acorde")
-            outs.append("Recomendación " + ", ".join(parts) + ".")
+            outs.append({"motivo": "Recomendación " + ", ".join(parts) + ".", "sinopsis_1linea": None})
         return outs
 
 # ======= Modelos de entrada/salida =======
@@ -43,12 +40,14 @@ Ritmo = Literal["Tranquilo", "Medio", "Vertiginoso"]
 Extension = Literal["Corto", "Medio", "Largo"]
 Formato = Literal["Tapa blanda", "Tapa dura", "Cualquiera"]
 Publico = Literal["Infantil", "Juvenil", "Adulto"]
+Destino = Literal["propio", "regalo"]
 
 class Payload(BaseModel):
+    destino: Destino  # NUEVO campo
     animo: Animo
     tipo: Tipo
     genero_tema: str = Field(..., description="Género (Ficción) o tema (No ficción) o 'No sé'")
-    ritmo: Ritmo
+    ritmo: Optional[Ritmo] = "Medio"
     extension: Extension
     formato: Formato
     precio_max: conint(ge=0)  # CLP
@@ -58,7 +57,7 @@ class Payload(BaseModel):
 class Recomendacion(BaseModel):
     nombre: str
     motivo: str
-    sinopsis_1linea: Optional[str] = None # <— NUEVO
+    sinopsis_1linea: Optional[str] = None
     precio_clp: int
     tipo: Literal["Ficción", "No ficción"]
     genero: str
@@ -69,9 +68,18 @@ class Recomendacion(BaseModel):
 class Respuesta(BaseModel):
     recomendaciones: List[Recomendacion]
 
+# ======= Nuevos modelos para Auth =======
+
+class Registro(BaseModel):
+    nombre: str
+    telefono: str
+
+class Login(BaseModel):
+    telefono: str
+
 # ======= App =======
 
-app = FastAPI(title="Recomendador Librería — Demo (Reglas + IA para motivo)")
+app = FastAPI(title="Recomendador Librería — Demo (Reglas + Login + Logs)")
 
 # CORS para Live Server (front local)
 app.add_middleware(
@@ -93,23 +101,62 @@ except Exception as e:
 
 motor = MotorRecomendador(CATALOGO)
 
+# ======= Logs =======
+
+LOGS_PATH = os.path.join(os.path.dirname(__file__), "data", "logs.json")
+
+def append_log(entry):
+    try:
+        if not os.path.exists(LOGS_PATH):
+            with open(LOGS_PATH, "w", encoding="utf-8") as f:
+                json.dump([], f)
+        with open(LOGS_PATH, "r", encoding="utf-8") as f:
+            logs = json.load(f)
+    except:
+        logs = []
+    logs.append(entry)
+    with open(LOGS_PATH, "w", encoding="utf-8") as f:
+        json.dump(logs, f, ensure_ascii=False, indent=2)
+
+# ======= Endpoints =======
 
 @app.get("/health")
 async def health():
     return {"ok": True, "items": len(CATALOGO)}
 
+# --- Registro/Login ---
+@app.post("/registro")
+def registro(data: Registro):
+    user = auth.registrar(data.nombre, data.telefono)
+    if not user:
+        raise HTTPException(status_code=400, detail="Teléfono ya registrado")
+    return {"ok": True, "usuario": user}
 
+@app.post("/login")
+def login(data: Login):
+    user = auth.login(data.telefono)
+    if not user:
+        raise HTTPException(status_code=401, detail="Usuario no encontrado")
+    return {"ok": True, "usuario": user}
+
+def require_auth(token: str = Header(...)):
+    user = auth.validar_token(token)
+    if not user:
+        raise HTTPException(status_code=401, detail="Token inválido")
+    return user
+
+# --- Recomendador protegido ---
 @app.post("/recomendar/", response_model=Respuesta)
-async def recomendar(payload: Payload):
+async def recomendar(payload: Payload, user=Depends(require_auth)):
     if not CATALOGO:
         raise HTTPException(status_code=500, detail="Catálogo no disponible")
 
-    # 1) Reglas deterministas: filtros + scoring
-    tops = motor.recomendar(payload.dict())  # lista de 1–3 dicts con _explicacion_motor
+    # 1) Motor de reglas
+    tops = motor.recomendar(payload.dict())
     if not tops:
         return {"recomendaciones": []}
 
-    # 2) IA SOLO para redactar motivo + sinopsis_1linea
+    # 2) Generar motivos
     preferencias = payload.dict()
     explicaciones = [t.get("_explicacion_motor", "") for t in tops]
 
@@ -126,21 +173,18 @@ async def recomendar(payload: Payload):
             "publico": t.get("publico"),
             "formato": t.get("formato", []) if isinstance(t.get("formato"), list) else [],
             "precio_clp": t.get("precio_clp", 0),
-            # opcional: "descripcion": t.get("descripcion")
         })
 
     try:
         motivos_items = redactar_motivos(preferencias, explicaciones, libros_para_llm)
-        # motivos_items es una lista de objetos: {"motivo": str, "sinopsis_1linea": str}
     except Exception as e:
         print("[WARN] Falla en IA redactor:", e)
         motivos_items = [
-            {"motivo": t.get("motivo", "Recomendación basada en tus preferencias."),
-             "sinopsis_1linea": None}
+            {"motivo": t.get("motivo", "Recomendación basada en tus preferencias."), "sinopsis_1linea": None}
             for t in tops
         ]
 
-    # 3) Respuesta final (sin campos internos)
+    # 3) Respuesta final
     res: List[Dict[str, Any]] = []
     for t, mi in zip(tops, motivos_items):
         formatos = t.get("formato", [])
@@ -161,4 +205,14 @@ async def recomendar(payload: Payload):
         }
         res.append(item)
 
-    return {"recomendaciones": res}
+    response = {"recomendaciones": res}
+
+    # 4) Guardar log
+    append_log({
+        "user_id": user["id"],
+        "timestamp": datetime.datetime.utcnow().isoformat(),
+        "payload": payload.dict(),
+        "recomendaciones": res
+    })
+
+    return response

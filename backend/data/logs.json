@@ -1,0 +1,151 @@
+[
+  {
+    "user_id": "ebd8c4d6-285d-4f0c-81f6-6e8c0e70d6a6",
+    "timestamp": "2025-09-03T19:50:54.428848",
+    "payload": {
+      "destino": "regalo",
+      "animo": "Romántico",
+      "tipo": "Me da igual",
+      "genero_tema": "Aventura",
+      "ritmo": "Medio",
+      "extension": "Largo",
+      "formato": "Cualquiera",
+      "precio_max": 27000,
+      "publico": "Adulto",
+      "evitar": []
+    },
+    "recomendaciones": [
+      {
+        "nombre": "Expedición al sur — M. Torres",
+        "motivo": "Recomiendo \"Expedición al sur\" por su emocionante aventura que invita a explorar paisajes y emociones intensas. Con un ritmo vertiginoso y un tono luminoso, es una lectura ideal para quienes buscan sumergirse en un viaje lleno de descubrimientos y sorpresas. Además, su extensión permite disfrutar de una experiencia enriquecedora sin sentirse apresurado. ",
+        "sinopsis_1linea": "Una travesía hacia el sur revela no solo paisajes inexplorados, sino también los profundos lazos que se forjan en el camino.",
+        "precio_clp": 12990,
+        "tipo": "Ficción",
+        "genero": "Aventura",
+        "formato": "Tapa blanda",
+        "publico": "Adulto",
+        "match_score": 78.0
+      },
+      {
+        "nombre": "Crónicas del desierto — J. Fuentes",
+        "motivo": "\"Crónicas del desierto\" es una opción fascinante que sumerge al lector en un mundo de desafíos y realidades crudas. Su tono oscuro y su ritmo vertiginoso mantienen la tensión y el interés, haciendo de esta obra una experiencia cautivadora. Con sus 380 páginas, ofrece una narrativa rica que satisface la búsqueda de aventuras intensas sin exceder tu presupuesto.",
+        "sinopsis_1linea": "En un desierto implacable, los personajes luchan por sobrevivir mientras se enfrentan a sus propios demonios.",
+        "precio_clp": 16990,
+        "tipo": "Ficción",
+        "genero": "Aventura",
+        "formato": "Tapa dura",
+        "publico": "Adulto",
+        "match_score": 78.0
+      }
+    ]
+  },
+  {
+    "user_id": "ebd8c4d6-285d-4f0c-81f6-6e8c0e70d6a6",
+    "timestamp": "2025-09-03T19:58:13.244495",
+    "payload": {
+      "destino": "propio",
+      "animo": "Aprender",
+      "tipo": "Me da igual",
+      "genero_tema": "Ciencia",
+      "ritmo": "Medio",
+      "extension": "Medio",
+      "formato": "Cualquiera",
+      "precio_max": 27000,
+      "publico": "Adulto",
+      "evitar": []
+    },
+    "recomendaciones": [
+      {
+        "nombre": "El origen de las estrellas — D. Morales",
+        "motivo": "Este libro es una fascinante exploración sobre la naturaleza del universo, ideal para quienes desean aprender y reflexionar sobre la ciencia. Con un ritmo medio y una extensión adecuada, logra mantener el interés del lector sin abrumarlo con información excesiva. Su tono reflexivo invita a la contemplación, perfecto para el público adulto.",
+        "sinopsis_1linea": "Un viaje a través de los conceptos fundamentales que explican el origen y la evolución de las estrellas.",
+        "precio_clp": 15990,
+        "tipo": "No ficción",
+        "genero": "Ciencia",
+        "formato": "Tapa blanda",
+        "publico": "Adulto",
+        "match_score": 100.0
+      },
+      {
+        "nombre": "Breve historia de Chile — J. Alarcón",
+        "motivo": "La 'Breve historia de Chile' ofrece una mirada profunda y accesible a la evolución de nuestro país, ideal para aquellos que buscan comprender el contexto histórico de Chile. Su extensión y ritmo medio permiten una lectura amena y reflexiva, todo dentro de un presupuesto accesible para el público adulto.",
+        "sinopsis_1linea": "Un recorrido por los hitos más relevantes de la historia chilena desde una perspectiva crítica y reflexiva.",
+        "precio_clp": 14990,
+        "tipo": "No ficción",
+        "genero": "Historia",
+        "formato": "Tapa blanda",
+        "publico": "Adulto",
+        "match_score": 59.0
+      },
+      {
+        "nombre": "Cerebro curioso — E. Marín",
+        "motivo": "'Cerebro curioso' es una obra que invita a descubrir los misterios del cerebro humano de manera entretenida y educativa. Con un tono luminoso y un enfoque en la divulgación científica, su ritmo medio la convierte en una lectura ideal para quienes desean aprender sin sentirse abrumados. Además, se ajusta perfectamente al presupuesto y al público adulto.",
+        "sinopsis_1linea": "Un fascinante viaje por las curiosidades y funciones del cerebro humano, presentado de manera accesible y amena.",
+        "precio_clp": 13990,
+        "tipo": "No ficción",
+        "genero": "Divulgación científica",
+        "formato": "Tapa blanda",
+        "publico": "Adulto",
+        "match_score": 58.0
+      }
+    ]
+  },
+  {
+    "user_id": "ebd8c4d6-285d-4f0c-81f6-6e8c0e70d6a6",
+    "timestamp": "2025-09-03T19:59:08.320869",
+    "payload": {
+      "destino": "regalo",
+      "animo": "Reflexivo",
+      "tipo": "No ficción",
+      "genero_tema": "Historia",
+      "ritmo": "Medio",
+      "extension": "Medio",
+      "formato": "Cualquiera",
+      "precio_max": 29000,
+      "publico": "Adulto",
+      "evitar": []
+    },
+    "recomendaciones": [
+      {
+        "nombre": "Breve historia de Chile — J. Alarcón",
+        "motivo": "Este libro es una excelente elección para quienes buscan comprender la historia de Chile de manera reflexiva y accesible. Con un ritmo medio y una extensión adecuada, permite una lectura profunda sin ser abrumadora. Además, su formato en tapa blanda lo convierte en un regalo perfecto para cualquier adulto interesado en conocer más sobre su país.",
+        "sinopsis_1linea": "Un recorrido reflexivo por los hitos más significativos de la historia chilena.",
+        "precio_clp": 14990,
+        "tipo": "No ficción",
+        "genero": "Historia",
+        "formato": "Tapa blanda",
+        "publico": "Adulto",
+        "match_score": 89.0
+      }
+    ]
+  },
+  {
+    "user_id": "2589a79b-15f4-4215-83be-84bbe54bfe7f",
+    "timestamp": "2025-09-03T20:08:27.365414",
+    "payload": {
+      "destino": "propio",
+      "animo": "Inspirarme",
+      "tipo": "No ficción",
+      "genero_tema": "Historia",
+      "ritmo": "Medio",
+      "extension": "Largo",
+      "formato": "Cualquiera",
+      "precio_max": 21500,
+      "publico": "Adulto",
+      "evitar": []
+    },
+    "recomendaciones": [
+      {
+        "nombre": "Breve historia de Chile — J. Alarcón",
+        "motivo": "Recomiendo 'Breve historia de Chile' porque es una obra que ofrece una mirada reflexiva sobre los hitos y procesos que han marcado la identidad de nuestro país. Con un ritmo medio y una extensión adecuada, este libro te permitirá sumergirte en la historia chilena de manera accesible y enriquecedora. Además, su precio lo hace una opción atractiva para quienes buscan ampliar sus conocimientos sin exceder su presupuesto.",
+        "sinopsis_1linea": "Un recorrido que explora los momentos clave en la historia de Chile, invitando a la reflexión sobre su identidad y cultura.",
+        "precio_clp": 14990,
+        "tipo": "No ficción",
+        "genero": "Historia",
+        "formato": "Tapa blanda",
+        "publico": "Adulto",
+        "match_score": 85.0
+      }
+    ]
+  }
+]
